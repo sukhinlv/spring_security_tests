@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: security_tests
+
+  security:
+    user:
+      password: pass
+
+logging:
+  level:
+    org.springframework.security: trace
+    org.springframework.web.cors: trace
+
+cors:
+  enabled: ${CORS_ENABLED:true}
+  cors-configuration:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+    allowed-methods: ${CORS_ALLOWED_METHODS:GET,POST,UPDATE,PATCH,OPTIONS,DELETE,PUT}
+    allowed-headers: ${CORS_ALLOWED_HEADERS:Origin,Content-Type,Accept,Authorization}
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web.exposure.include: ${ENDPOINTS_WEB_EXPOSURE_INCLUDE:metrics,health,prometheus,info,beans,scheduledtasks}
+  endpoint:
+    metrics:
+      enabled: ${METRICS_ENABLED:true}
+    health:
+      enabled: ${HEALTH_ENABLED:true}
+      probes:
+        enabled: ${HEALTH_PROB:true}
+      show-details: always
+    prometheus:
+      enabled: ${PROMETHEUS_ENABLED:true}
+    info:
+      enabled: ${HEALTH_INFO_ENABLED:true}
+    beans:
+      enabled: ${HEALTH_BEANS_ENABLED:true}
+    scheduledtasks:
+      enabled: ${SCHEDULEDTASKS_ENABLED:true}
+  health:
+    redis:
+      enabled: ${HEALTH_REDIS_ENABLED:true}
+  metrics:
+    distribution:
+      percentiles-histogram:
+        [ "http.server.requests" ]: true # for top-level SLA endpoints estimation
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    git:
+      enabled: true
+      mode: full

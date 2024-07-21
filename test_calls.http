@@ -1,0 +1,24 @@
+### Доступ к закрытому ролью эндпоинту
+GET http://localhost:8080/V1/test
+Authorization: Bearer user
+
+### Доступ к эндпоинту, закрытому другой ролью
+GET localhost:8080/V1/test-second
+Authorization: Bearer admin
+
+### Ошибка аутентификации (в заголовке не указан токен)
+GET http://localhost:8080/V1/test
+
+### Ошибка доступа - недостаточно прав для доступа к эндпоинту
+GET http://localhost:8080/V1/test
+Authorization: Bearer admin
+
+### Тест открытого эндпоинта
+GET localhost:8080/V2/test-free
+
+### actuator
+GET localhost:8080/actuator
+
+### prometheus
+GET localhost:8080/actuator/prometheus
+

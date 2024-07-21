@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant request
+participant app
+participant filters
+participant AuthenticationFilter
+
+request -> app
+app -> filters
+filters -> filters: обработка цепочки \nфильтров
+filters -> JwtAuthenticationFilter: очередь дошла до фильтра
+JwtAuthenticationFilter -> JwtAuthenticationFilter: Проверяем наличие\nтокена аутентификации\nв хедере
+JwtAuthenticationFilter --> filters: Нет токена, передаем\nвыполнение по цепочке\nфильтров дальше
+JwtAuthenticationFilter -> AuthenticationManager: есть токен,\nauthenticate(authentication)
+AuthenticationManager -> AuthenticationManager: перебирает доступные\nAuthenticationProvider
+AuthenticationManager -> JwtAuthenticationProvider
+JwtAuthenticationProvider -> JwtAuthenticationProvider: обработка входящего JwtAuthorization\nполучение данных из базы и т.д.,\nгенерация EmployeeAuthentication
+JwtAuthenticationProvider --> AuthenticationManager
+AuthenticationManager --> JwtAuthenticationFilter
+JwtAuthenticationFilter -> JwtAuthenticationFilter: сохраняем EmployeeAuthentication\nв SecurityContextHolder
+JwtAuthenticationFilter --> filters: передаем выполнение по\nцепочке фильтров дальше
+filters -> AuthenticationFilter
+AuthenticationFilter -> AuthenticationFilter: проверяет заполнен ли\nAuthentication в SecurityContextHolder\nи выставлен ли isAuthenticated в true
+AuthenticationFilter -[#red]x filters: если нет, то\nвыбрасывается\nисключение
+AuthenticationFilter --> filters: если да, то передает\nуправление дальше
+
+@enduml
